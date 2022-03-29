@@ -1,0 +1,38 @@
+#!/bin/sh
+
+# Run sxhkd if not already running
+pgrep -x sxhkd > /dev/null || sxhkd &
+feh --bg-fill Pictures/walls/wall.jpg &
+picom &
+
+# Run swallow script
+pgrep bspswallow || bspswallow &
+# Add workspaces
+bspc monitor -d I II III IV V VI VII 
+
+
+# Set xresources
+xrdb $XDG_CONFIG_HOME/xorg/Xresources
+# Set gaps
+bspc config window_gap           15
+bspc config borderless_monocle   true
+bspc config gapless_monocle      true
+
+bspc config border_width         1
+
+# Launch bar
+~/.config/polybar/launch.sh
+
+dunst --config $HOME/.config/dunst/dunstrc &
+
+
+# Window rules
+bspc rule -a Gimp desktop='^8' state=floating follow=on
+bspc rule -a Firefox desktop='^9'
+bspc rule -a mplayer2 state=floating
+bspc rule -a Nitrogen state=floating
+bspc rule -a Kupfer.py focus=on
+bspc rule -a Screenkey manage=off
+
+setxkbmap -option grp:alt_shift_toggle us,ar &
+
